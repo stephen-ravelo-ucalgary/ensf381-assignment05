@@ -1,0 +1,60 @@
+main[class="signUp"] {
+    padding: 20px;
+    text-align: center;
+    align-items: center;
+    
+    margin: 20px auto;
+    max-width: 90%;
+}
+
+main[class="signUp"] h2 {
+    color: #004080;
+    
+}
+
+main[class="signUp"] div {
+    margin: 0 100px 0 100px;
+    background-color: #f4f4f4;
+    border-color: #000000;
+    border-width: 2px;
+    border-style: solid;
+    padding: 5px;
+    text-align: center;
+}
+
+main[class="signUp"] form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #d4d4d4;
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    padding: 30px;
+    margin: 0px 150px 0px 150px;
+    max-width: 100%;
+}
+
+main[class="signUp"] input[type="text"], main[class="signUp"] input[type="password"] {
+    width: 250px;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 3px solid #b2b2b2;
+    background-color: lightyellow;
+}
+
+main[class="signUp"] button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+main[class="signUp"] button:hover {
+    background-color: #45A049;
+    opacity: 1.0;
+}
