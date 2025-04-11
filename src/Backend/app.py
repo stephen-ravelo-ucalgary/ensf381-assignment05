@@ -77,5 +77,14 @@ def drop_course(student_id):
     
     return jsonify({"success": False})
 
+@app.route('/student_courses/<student_id>', methods=['GET'])
+def enrolled_courses(student_id):
+    for student in students:
+        if student["id"] == int(student_id):
+            print(student['enrolled_courses'])
+            return jsonify({"enrolled_courses": student['enrolled_courses']})
+
+    return jsonify({"enrolled_courses": []})
+
 if __name__ == '__main__':
     app.run(debug=True)
