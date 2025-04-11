@@ -54,5 +54,17 @@ def courses():
     courses = json.load(open(os.path.join(app.root_path, 'courses.json')))
     return jsonify({"courses": courses})
 
+@app.route('/enroll/<student_id>', methods=['POST'])
+def enroll_course(student_id):
+    data = request.get_json()
+    course = data.get('course')
+    for student in students:
+        if student["id"] == int(student_id):
+            student["enrolled_courses"].append(course)
+            print(student['enrolled_courses'])
+            return jsonify({"success": True})
+        
+    return jsonify({"success": False})
+
 if __name__ == '__main__':
     app.run(debug=True)
