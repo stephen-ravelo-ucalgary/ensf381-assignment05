@@ -26,6 +26,7 @@ const CoursesPage = () => {
 
   const handleEnroll = async (course) => {
     
+    course['enrollmentId'] = Date.now(); // Unique ID for each enrollment
     const backendEndpoint = "http://127.0.0.1:5000/enroll/" + user.id;
     try {
       const response = await fetch(backendEndpoint, {
@@ -41,10 +42,7 @@ const CoursesPage = () => {
       
       if (data.success) {
         setError('');
-        setEnrolledCourses(prev => [...prev, {
-          ...course,
-          enrollmentId: Date.now() // Unique ID for each enrollment
-        }]);
+        setEnrolledCourses(prev => [...prev, {...course}]);
       } else {
         setError('Failed to enroll in course!');
       }
@@ -54,10 +52,30 @@ const CoursesPage = () => {
 
   };
 
-  const handleRemove = (enrollmentId) => {
-    setEnrolledCourses(prev =>
-      prev.filter(course => course.enrollmentId !== enrollmentId)
-    );
+  const handleRemove = async (enrollmentId) => {
+    const backendEndpoint = "http://127.0.0.1:5000/drop/" + user.id;
+    try {
+      const response = await fetch(backendEndpoint, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          'enrollmentId': enrollmentId,
+        }), //Converts a JavaScript object or value into a JSON string.
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setEnrolledCourses(prev =>
+          prev.filter(course => course.enrollmentId !== enrollmentId)
+        );
+      } else {
+        setError('Failed to drop course!');
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   async function getCourses() {
