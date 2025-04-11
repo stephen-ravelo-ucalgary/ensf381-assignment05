@@ -61,7 +61,6 @@ def enroll_course(student_id):
     for student in students:
         if student["id"] == int(student_id):
             student["enrolled_courses"].append(course)
-            print(student['enrolled_courses'])
             return jsonify({"success": True})
         
     return jsonify({"success": False})
