@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import courses from '../data/courses';
-import testimonials from '../data/testimonials';
 
 const Homepage = () => {
   const [featuredCourses, setFeaturedCourses] = useState([]);
   const [randomTestimonials, setRandomTestimonials] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    // Select 3 random courses
-    const shuffledCourses = [...courses].sort(() => 0.5 - Math.random());
-    setFeaturedCourses(shuffledCourses.slice(0, 3));
-
+    // Get all courses
+    getCourses();
     // Select 2 random testimonials
     getRandomTestimonials();
   }, []);
+
+  // Select 3 random courses
+  useEffect(() => {
+    const shuffledCourses = [...courses].sort(() => 0.5 - Math.random());
+    setFeaturedCourses(shuffledCourses.slice(0, 3));
+  }, [courses])
   
   async function getRandomTestimonials() {
     setIsLoading(true);
@@ -30,6 +33,25 @@ const Homepage = () => {
       });
       const data = await response.json();
       setRandomTestimonials(data.randomTestimonials);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function getCourses() {
+    setIsLoading(true);
+    try {
+      const response = await fetch ("http://127.0.0.1:5000/courses", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = await response.json();
+      setCourses(data.courses);
+      
     } catch (error) {
       console.error(error);
     } finally {
@@ -53,36 +75,38 @@ const Homepage = () => {
         </section>
 
         {/* Featured Courses */}
-        <section style={{ marginBottom: '40px' }}>
-          <h3 style={{ color: '#004080', marginBottom: '20px' }}>Featured Courses</h3>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '20px'
-          }}>
-            {featuredCourses.map(course => (
-              <div key={course.id} style={{
-                backgroundColor: '#e6f2ff',
-                borderRadius: '10px',
-                padding: '15px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}>
-                <img
-                  src={course.image}
-                  alt={course.name}
-                  style={{
-                    width: '100%',
-                    height: '200px',
-                    objectFit: 'cover',
-                    borderRadius: '5px'
-                  }}
-                />
-                <h4 style={{ margin: '10px 0', color: '#003366' }}>{course.name}</h4>
-                <p style={{ fontSize: '0.9rem' }}>{course.instructor}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {isLoading ? null : (
+          <section style={{ marginBottom: '40px' }}>
+            <h3 style={{ color: '#004080', marginBottom: '20px' }}>Featured Courses</h3>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '20px'
+            }}>
+              {featuredCourses.map(course => (
+                <div key={course.id} style={{
+                  backgroundColor: '#e6f2ff',
+                  borderRadius: '10px',
+                  padding: '15px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                }}>
+                  <img
+                    src={course.image}
+                    alt={course.name}
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      objectFit: 'cover',
+                      borderRadius: '5px'
+                    }}
+                  />
+                  <h4 style={{ margin: '10px 0', color: '#003366' }}>{course.name}</h4>
+                  <p style={{ fontSize: '0.9rem' }}>{course.instructor}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Testimonials */}
         {isLoading ? null : (

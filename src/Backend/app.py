@@ -49,5 +49,10 @@ def testimonials():
     testimonials = json.load(open(os.path.join(app.root_path, 'testimonials.json')))
     return jsonify({"randomTestimonials": random.sample(testimonials, 2)})
 
+@app.route('/courses', methods=['GET'])
+def courses():
+    courses = json.load(open(os.path.join(app.root_path, 'courses.json')))
+    return jsonify({"courses": courses})
+
 if __name__ == '__main__':
     app.run(debug=True)

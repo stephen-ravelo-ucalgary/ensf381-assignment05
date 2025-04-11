@@ -3,13 +3,17 @@ import Header from './Header';
 import Footer from './Footer';
 import CourseItem from './CourseItem';
 import EnrollmentList from './EnrollmentList';
-import courses from '../data/courses';
 
 const CoursesPage = () => {
   const [enrolledCourses, setEnrolledCourses] = useState(() => {
     const saved = localStorage.getItem('enrollments');
     return saved ? JSON.parse(saved) : [];
   });
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    getCourses();
+  }, [])
 
   // Save to localStorage
   useEffect(() => {
@@ -28,6 +32,21 @@ const CoursesPage = () => {
       prev.filter(course => course.enrollmentId !== enrollmentId)
     );
   };
+
+  async function getCourses() {
+    try {
+      const response = await fetch ("http://127.0.0.1:5000/courses", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = await response.json();
+      setCourses(data.courses);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div style={{ 
