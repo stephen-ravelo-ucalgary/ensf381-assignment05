@@ -29,5 +29,18 @@ def register():
     students.append(newUser)
     return jsonify({"newUser": True, "message": "Signup successful! Redirecting to login..."})
     
+    
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    entered_username = data.get('username')
+    entered_password = data.get('password')
+    
+    for student in students:
+        if entered_username == student['username'] and entered_password == student['password']:
+            return jsonify({"success": True, "user": student})
+        
+    return jsonify({"success": False, "user": None})
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

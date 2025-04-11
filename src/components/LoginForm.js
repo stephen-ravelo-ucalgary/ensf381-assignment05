@@ -15,13 +15,22 @@ const LoginForm = () => {
     setIsLoading(true);
     setError('');
 
+    const backendEndpoint = "http://127.0.0.1:5000/login";
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/users');
-      const users = await response.json();
-      const validUser = users.find(u => u.username === username && u.email === password);
+      const response = await fetch(backendEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          'username': username,
+          'password': password,
+        }), //Converts a JavaScript object or value into a JSON string.
+      });
+      const data = await response.json();
 
-      if (validUser) {
-        login(validUser);
+      if (data.success) {
+        login(data.user);
         // Redirect after 2 seconds
         setTimeout(() => {
           navigate('/courses');
@@ -67,10 +76,10 @@ const LoginForm = () => {
       </div>
 
       {error && (
-        <div style={{ 
-          color: '#D32F2F', 
-          backgroundColor: '#FFEBEE', 
-          padding: '10px', 
+        <div style={{
+          color: '#D32F2F',
+          backgroundColor: '#FFEBEE',
+          padding: '10px',
           borderRadius: '4px',
           marginBottom: '15px'
         }}>
@@ -78,8 +87,8 @@ const LoginForm = () => {
         </div>
       )}
 
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         disabled={isLoading}
         style={{
           width: '100%',

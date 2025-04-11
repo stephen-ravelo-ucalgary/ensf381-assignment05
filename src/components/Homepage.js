@@ -8,7 +8,7 @@ const Homepage = () => {
   const [featuredCourses, setFeaturedCourses] = useState([]);
   const [randomTestimonials, setRandomTestimonials] = useState([]);
 
-  useEffect(() => {
+  useEffect(async () => {
     // Select 3 random courses
     const shuffledCourses = [...courses].sort(() => 0.5 - Math.random());
     setFeaturedCourses(shuffledCourses.slice(0, 3));
@@ -16,6 +16,22 @@ const Homepage = () => {
     // Select 2 random testimonials
     const shuffledTestimonials = [...testimonials].sort(() => 0.5 - Math.random());
     setRandomTestimonials(shuffledTestimonials.slice(0, 2));
+    const backendEndpoint = "http://127.0.0.1:5000/testimonials";
+    try {
+      const response = await fetch(backendEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          'username': username,
+          'password': password,
+        }), //Converts a JavaScript object or value into a JSON string.
+      });
+      const data = await response.json();
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   return (
