@@ -1,4 +1,6 @@
-from flask import Flask, jsonify, request
+import os
+import random
+from flask import Flask, jsonify, request, json
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -41,6 +43,11 @@ def login():
             return jsonify({"success": True, "user": student})
         
     return jsonify({"success": False, "user": None})
+
+@app.route('/testimonials', methods=['GET'])
+def testimonials():
+    testimonials = json.load(open(os.path.join(app.root_path, 'testimonials.json')))
+    return jsonify({"randomTestimonials": random.sample(testimonials, 2)})
 
 if __name__ == '__main__':
     app.run(debug=True)
