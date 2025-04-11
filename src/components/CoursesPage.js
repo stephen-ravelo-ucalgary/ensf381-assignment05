@@ -3,25 +3,22 @@ import Header from './Header';
 import Footer from './Footer';
 import CourseItem from './CourseItem';
 import EnrollmentList from './EnrollmentList';
-import courses from '../data/courses';
 import { useAuth } from '../context/AuthContext';
 
 const CoursesPage = () => {
   const { user } = useAuth();
   const [error, setError] = useState('');
-  const [enrolledCourses, setEnrolledCourses] = useState(() => {
-    const saved = localStorage.getItem('enrollments');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     getCourses();
+    getEnrolledCourses();
   }, [])
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem('enrollments', JSON.stringify(enrolledCourses));
+    // localStorage.setItem('enrollments', JSON.stringify(enrolledCourses));
   }, [enrolledCourses]);
 
   const handleEnroll = async (course) => {
@@ -70,6 +67,21 @@ const CoursesPage = () => {
       });
       const data = await response.json();
       setCourses(data.courses);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function getEnrolledCourses() {
+    try {
+      const response = await fetch ("http://127.0.0.1:5000/student_courses/" + user.id, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = await response.json();
+      setEnrolledCourses(data.enrolled_courses);
     } catch (error) {
       console.error(error);
     }
