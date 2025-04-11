@@ -22,6 +22,7 @@ function App() {
             path="/courses" 
             element={<ProtectedRoute><CoursesPage /></ProtectedRoute>} 
           />
+          <Route path="/signup" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
