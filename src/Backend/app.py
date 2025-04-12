@@ -1,3 +1,6 @@
+# Aaron Lauang 30216529
+# Stephen Ravelo 30213405
+
 import os
 import random
 from flask import Flask, jsonify, request, json
@@ -80,7 +83,6 @@ def drop_course(student_id):
 def enrolled_courses(student_id):
     for student in students:
         if student["id"] == int(student_id):
-            print(student['enrolled_courses'])
             return jsonify({"enrolled_courses": student['enrolled_courses']})
 
     return jsonify({"enrolled_courses": []})
